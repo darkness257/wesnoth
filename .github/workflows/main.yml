@@ -350,3 +350,15 @@ jobs:
           nickname: ${{ vars.IRC_NICK }} # is also used for sasl username
           sasl_password: ${{ secrets.IRC_SASL_PASSWORD }}
           message: "❌ ${{ github.workflow }} workflow run ${{ github.run_number }} failed on \x0306${{ github.ref_name }}\x0F: ${{ env.COMMIT_SUBJECT }} by \x0315${{ github.actor }}\x0F: \x0302${{ github.event.head_commit.url }}\x0F"
+          
+      - name: Create Release and Upload Asset
+        if: matrix.os == 'windows-latest'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "build-${{ github.run_number }}"
+          name: "Custom Wesnoth Build #${{ github.run_number }}"
+          files: |
+             package/wesnoth-*.exe
+             package/Wesnoth-Installer.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

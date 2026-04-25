@@ -181,6 +181,15 @@ jobs:
           name: Windows-Installer
           path: utils/dockerbuilds/wesnoth-*-win64.exe
 
+      - name: Create Release and Upload Windows Installer
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "windows-build-${{ github.run_number }}"
+          name: "Windows Build #${{ github.run_number }}"
+          files: utils/dockerbuilds/wesnoth-*-win64.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   flatpak:
     runs-on: ubuntu-latest
     container:
@@ -351,17 +360,3 @@ jobs:
           sasl_password: ${{ secrets.IRC_SASL_PASSWORD }}
           message: "❌ ${{ github.workflow }} workflow run ${{ github.run_number }} failed on \x0306${{ github.ref_name }}\x0F: ${{ env.COMMIT_SUBJECT }} by \x0315${{ github.actor }}\x0F: \x0302${{ github.event.head_commit.url }}\x0F"
           
-      - name: Create Release and Upload Windows Installer
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: "windows-build-${{ github.run_number }}"
-          name: "Windows Build #${{ github.run_number }}"
-          files: utils/dockerbuilds/wesnoth-*-win64.exe
-        env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload Windows-Installer
-        uses: actions/upload-artifact@v6
-        with:
-          name: Windows-Installer
-          path: utils/dockerbuilds/wesnoth-*-win64.exe
